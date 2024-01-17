@@ -10,6 +10,9 @@ class Easyshop(MycroftSkill):
     def handle_easyshop(self, message):
         self.speak_dialog('easyshop')
 
+    @intent_handler(IntentBuilder('AskItemBrand').require('Brand').build())
+    @intent_handler(IntentBuilder('IntentName').one_of(‘Brand’, ‘Color’))
+
     @intent_handler('view.goods.intent')
     def handle_view_goods(self, message):
         self.speak('Taking a photo now. Please wait a second for me to get the result.')
