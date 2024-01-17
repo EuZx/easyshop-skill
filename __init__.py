@@ -97,25 +97,32 @@ class Easyshop(MycroftSkill):
         self.speak_dialog('item.category', {'category': self.category_str})
 
 
-    @intent_handler(IntentBuilder('AskItemCategory').require('Category').build())
-    def handle_ask_item_category(self, message):
-        self.speak('I am talking about the category of the item')
+        @intent_handler(IntentBuilder('AskItemCategory').require('Category').require('getDetailContext').build())
+        def handle_ask_item_category(self, message):
+            self.handle_ask_item_detail('category', self.category_str)
 
-    @intent_handler(IntentBuilder('AskItemColor').require('Color').build())
-    def handle_ask_item_color(self, message):
-        self.speak('I am talking about the color of the item')
+        @intent_handler(IntentBuilder('AskItemColor').require('Color').require('getDetailContext').build())
+        def handle_ask_item_color(self, message):
+            self.handle_ask_item_detail('color', self.color_str)
 
-    @intent_handler(IntentBuilder('AskItemBrand').require('Brand').build())
-    def handle_ask_item_brand(self, message):
-        self.speak('I am talking about the brand of the item')
+        @intent_handler(IntentBuilder('AskItemBrand').require('Brand').require('getDetailContext').build())
+        def handle_ask_item_brand(self, message):
+            self.handle_ask_item_detail('brand', self.brand_str)
 
-    @intent_handler(IntentBuilder('AskItemKw').require('Kw').build())
-    def handle_ask_item_keywords(self, message):
-        self.speak('I am talking about the keywords of the item')
+        @intent_handler(IntentBuilder('AskItemKw').require('Kw').require('getDetailContext').build())
+        def handle_ask_item_keywords(self, message):
+            self.handle_ask_item_detail('keyword', self.kw_str)
 
-    @intent_handler(IntentBuilder('AskItemInfo').require('Info').build())
-    def handle_ask_item_complete_info(self, message):
-        self.speak('I am speaking the complete information of the item')
+        @intent_handler(IntentBuilder('AskItemInfo').require('Info').require('getDetailContext').build())
+        def handle_ask_item_complete_info(self, message):
+            if self.color_str == '':
+                self.handle_ask_item_detail('category', self.category_str)
+            else:
+                self.speak_dialog('item.complete.info', {
+                              'category': self.category_str, 'color': self.color_str})
+            self.handle_ask_item_detail('brand', self.brand_str)
+            self.handle_ask_item_detail('keyword', self.kw_str)
+
 
     @intent_handler(IntentBuilder('FinishOneItem').require('Finish').build())
     def handle_finish_current_item(self, message):
